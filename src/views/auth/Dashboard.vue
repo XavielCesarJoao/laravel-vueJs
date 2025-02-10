@@ -19,7 +19,10 @@ const getUser = async () => {
 const logout = async () => {
   try{
     const response = await axiosInstance.post('/logout');
-    console.log(response.data);
+    user.value = {
+      name: "",
+      email: "",
+    }
   }catch (error){
     console.error(error);
   }
