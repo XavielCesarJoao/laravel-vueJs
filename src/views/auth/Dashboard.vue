@@ -1,45 +1,20 @@
 <script setup lang="ts">
+import {userAuthStore} from "@/store/auth";
 
-import axiosInstance from "@/lib/Axios";
-import {ref} from "vue";
+const auth = userAuthStore();
 
-const user = ref({
-  name: "",
-  email: "",
-});
-
-const getUser = async () => {
-  try {
-    const response = await axiosInstance.get('/user');
-    user.value = response.data;
-  }catch (error){
-    console.log("PORRAZ");
-  }
-}
-const logout = async () => {
-  try{
-    const response = await axiosInstance.post('/logout');
-    user.value = {
-      name: "",
-      email: "",
-    }
-  }catch (error){
-    console.error(error);
-  }
-}
-
-getUser();
+auth.GetUser();
 
 </script>
 
 <template>
 <div class="p-5">
   <h1 class="text-3xl text-red-800">Dasboard</h1>
-  <p>{{user.name}}</p>
+  <p>{{auth.user?.name}}</p>
   <br>
-  <p>{{user.email}}</p>
+  <p>{{auth.user?.email}}</p>
   <div>
-    <button @click="logout" class="btn btn-primary">Logout</button>
+    <button @click="auth.Logout" class="btn btn-primary">Logout</button>
   </div>
 </div>
 </template>
