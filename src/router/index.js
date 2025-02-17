@@ -3,33 +3,38 @@ import HomeView from '../views/HomeView.vue'
 import Register from "@/views/auth/Register.vue";
 import Login from "@/views/auth/Login.vue";
 import Dashboard from "@/views/auth/Dashboard.vue";
+import {userAuthStore} from "@/store/auth.js";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       component: HomeView,
+      meta: {requiresAuth: true}
+      
     },
 
     {
       path: '/register',
-      name: 'register',
-      component: Register
+      name: 'Register',
+      component: Register,
+      meta: {requiresGuest: true},
 
     },
     {
       path: '/login',
-      name: 'login',
-      component: Login
+      name: 'Login',
+      component: Login,
+      meta: {requiresGuest: true},
     },
     {
       path: '/dashboard',
-      name: 'dashboard',
-      component: Dashboard
+      name: 'Dashboard',
+      component: Dashboard,
+      meta: {requiresAuth: true},
     },
-      // Minhas rotas normais
     {
       path: '/users',
       name:'users',
@@ -37,5 +42,17 @@ const router = createRouter({
     },
   ],
 })
+
+router.beforeEach((to, from, next) => {
+  const auth = userAuthStore();
+  if (to.matched.some((record)=> record.meta.requiresAuth) && !auth.isLoggedIn){
+    next({name: "Login"})
+  }
+  if(to.matched.some((record) => record.meta.re))
+  else if (to.matched.some((record) => record.meta.requiresGuest) && auth.isLoggedIn){
+    next({name: "Dashboard"})
+  }
+  else next();
+});
 
 export default router

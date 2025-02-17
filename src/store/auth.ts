@@ -18,7 +18,9 @@ export const userAuthStore = defineStore("auth", () => {
         })
 
         try {
+
             await axiosInstance.post("/register", data);;
+            await GetUser();
             router.push("/dashboard");
         } catch (e) {
             if (e instanceof AxiosError && e.response.status === 422) {
@@ -31,10 +33,9 @@ export const userAuthStore = defineStore("auth", () => {
         await axiosInstance.get("/sanctum/csrf-cookie", {
             baseURL: "http://localhost:8000",
         })
-
         try {
-
             await axiosInstance.post("/login", data);
+            await GetUser();
             router.push("/dashboard")
         } catch (e) {
             if (e instanceof AxiosError && e.response.status === 422) {
@@ -43,7 +44,6 @@ export const userAuthStore = defineStore("auth", () => {
             }
         }
     }
-
     const GetUser = async () => {
         try {
             const userData = await axiosInstance.get("/user");
@@ -52,6 +52,11 @@ export const userAuthStore = defineStore("auth", () => {
         }catch (e){
 
         }
+    }
+    const production = () =>{
+        return new Promise((recive, reject) => {
+
+        });
     }
 
     const Logout = async () => {
@@ -67,4 +72,11 @@ export const userAuthStore = defineStore("auth", () => {
 
     return { user, isLoggedIn, Register, Login, Logout, GetUser, }
 
-})
+},{
+        persist: {
+            storage: sessionStorage,
+            pick: ["user", "isLoggedIn"]
+        }
+    }
+
+)
