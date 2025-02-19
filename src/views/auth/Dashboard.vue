@@ -5,11 +5,7 @@ import {onMounted} from "vue";
 const auth = userAuthStore();
 
 onMounted(() => {
-  if (!auth.isLoggedIn) {
-     console.log("Mesmo logado fiz uma requisição ao servidor");
      auth.GetUser();
-  }
-
 })
 </script>
 

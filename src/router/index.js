@@ -40,6 +40,17 @@ const router = createRouter({
       name:'users',
       component: () => import('../views/UserViews.vue')
     },
+    {
+      path: "/404",
+      name: "404",
+      component: ()=> import("@/views/404.vue")
+    },
+
+    {
+      path: "/500",
+      name: "500",
+      component: ()=> import("@/views/500.vue")
+    }
   ],
 })
 
@@ -48,7 +59,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record)=> record.meta.requiresAuth) && !auth.isLoggedIn){
     next({name: "Login"})
   }
-  if(to.matched.some((record) => record.meta.re))
+
   else if (to.matched.some((record) => record.meta.requiresGuest) && auth.isLoggedIn){
     next({name: "Dashboard"})
   }
